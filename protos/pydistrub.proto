@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package rpc;
+
+message ApplyRequest {
+    string client_id = 1;
+    int64 priority = 2;
+    float weight = 3;
+    repeated string allocate_to = 4;
+}
+
+message ApplyResponse{
+    RetObject ret_obj = 1;
+    string seesion_id = 2;
+}
+
+message Request {
+    string session_id = 1;
+    string remote_func = 2;
+    map<string, string> params = 3;
+}
+
+message Void {}
+
+message RetObject {
+    int64 ret_code = 1;   // 消息码
+    string ret_msg = 2;
+    string session_id = 3;
+}
+
+
+service InvokeRemote {
+    rpc TaskApply(ApplyRequest) returns (ApplyResponse);
+    rpc TaskDispatcher(Request) returns (RetObject);
+    rpc Close(Void) returns(Void);
+}
+
